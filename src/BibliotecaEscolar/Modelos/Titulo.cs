@@ -37,5 +37,35 @@ namespace BibliotecaEscolar.Modelos
                 _ejemplares.Add(new Ejemplar(i));
             }
         }
+    
+
+public int ContarDisponibles()
+{
+    int disponibles = 0;
+
+    foreach (Ejemplar ejemplar in _ejemplares)
+    {
+        if (ejemplar.EstaDisponible)
+        {
+            disponibles++;
+        }
     }
+
+    return disponibles;
+}
+
+public bool RegistrarPrestamo()
+{
+    foreach (Ejemplar ejemplar in _ejemplares)
+    {
+        if (ejemplar.Prestar())
+        {
+            PrestamosHistoricos++;
+            return true;
+        }
+    }
+
+    return false;
+}
+}
 }

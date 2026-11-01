@@ -94,3 +94,60 @@ else
 {
     Console.WriteLine("Se encontraron inconsistencias.");
 }
+
+Console.WriteLine();
+Console.WriteLine("===== PRUEBAS DE PRESTAMOS =====");
+
+// Seleccionamos tres solicitudes de prueba.
+Titulo[] solicitudes =
+{
+    biblioteca.Titulos[0], // El principito
+    biblioteca.Titulos[3], // Pedro Páramo
+    biblioteca.Titulos[0]  // El principito nuevamente
+};
+
+for (int i = 0; i < solicitudes.Length; i++)
+
+{
+    Titulo libro = solicitudes[i];
+
+    int disponiblesAntes = libro.ContarDisponibles();
+    int historialAntes = libro.PrestamosHistoricos;
+
+    bool resultado = libro.RegistrarPrestamo();
+
+    Console.WriteLine();
+    Console.WriteLine($"Prestamo {i + 1}: {libro.Nombre}");
+
+    Console.WriteLine(
+        $"Resultado: {(resultado ? "Exitoso" : "Sin disponibilidad")}");
+
+    Console.WriteLine(
+        $"Disponibles: {disponiblesAntes} -> {libro.ContarDisponibles()}");
+
+    Console.WriteLine(
+        $"Historial: {historialAntes} -> {libro.PrestamosHistoricos}");
+}
+
+Console.WriteLine();
+Console.WriteLine("===== PRUEBA SIN DISPONIBILIDAD =====");
+
+
+Titulo libroAgotado = biblioteca.Titulos[3];
+
+int disponiblesAntesAgotado = libroAgotado.ContarDisponibles();
+int historialAntesAgotado = libroAgotado.PrestamosHistoricos;
+
+// Intentamos registrar otro préstamo.
+bool prestamoRealizado = libroAgotado.RegistrarPrestamo();
+
+Console.WriteLine($"Título: {libroAgotado.Nombre}");
+
+Console.WriteLine(
+    $"Resultado: {(prestamoRealizado ? "Exitoso" : "Sin disponibilidad")}");
+
+Console.WriteLine(
+    $"Disponibles: {disponiblesAntesAgotado} -> {libroAgotado.ContarDisponibles()}");
+
+Console.WriteLine(
+    $"Historial: {historialAntesAgotado} -> {libroAgotado.PrestamosHistoricos}");

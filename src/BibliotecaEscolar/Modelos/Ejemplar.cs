@@ -11,5 +11,16 @@ namespace BibliotecaEscolar.Modelos
             Id = id;
             EstaDisponible = true;
         }
+
+        public bool Prestar()
+        {
+            if (!EstaDisponible)
+            {
+                return false;
+            }
+
+            EstaDisponible = false;
+            return true;
+        }
     }
 }
