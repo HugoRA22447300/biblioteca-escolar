@@ -151,3 +151,57 @@ Console.WriteLine(
 
 Console.WriteLine(
     $"Historial: {historialAntesAgotado} -> {libroAgotado.PrestamosHistoricos}");
+
+Console.WriteLine();
+Console.WriteLine("===== CATALOGO ANTES DEL ORDENAMIENTO =====");
+
+foreach (Titulo libro in biblioteca.Titulos)
+{
+    Console.WriteLine(
+        $"{libro.Nombre} - Prestamos: {libro.PrestamosHistoricos}");
+}
+
+// Aplicamos nuestro algoritmo de insercion.
+List<Titulo> catalogoOrdenado =
+    biblioteca.ObtenerCatalogoOrdenadoPorPrestamos();
+
+Console.WriteLine();
+Console.WriteLine("===== CATALOGO ORDENADO POR PRESTAMOS =====");
+
+int posicion = 1;
+
+foreach (Titulo libro in catalogoOrdenado)
+{
+    Console.WriteLine(
+        $"{posicion}. {libro.Nombre} - Prestamos: {libro.PrestamosHistoricos}");
+
+    posicion++;
+}
+
+Console.WriteLine();
+Console.WriteLine("===== PRUEBA DE ESTABILIDAD =====");
+
+// Creamos una biblioteca independiente para esta prueba.
+Biblioteca bibliotecaPrueba = new Biblioteca();
+
+// Dos registros con el mismo nombre y cantidad de prestamos.
+bibliotecaPrueba.AgregarTitulo(new Titulo(
+    "Libro de prueba", "9780000000088", 2, 5));
+
+bibliotecaPrueba.AgregarTitulo(new Titulo(
+    "Libro de prueba", "9780000000095", 3, 5));
+
+// Agregamos otro libro con mas prestamos.
+bibliotecaPrueba.AgregarTitulo(new Titulo(
+    "Otro libro", "9780000000101", 1, 8));
+
+// Aplicamos nuestro algoritmo de insercion.
+List<Titulo> resultadoPrueba =
+    bibliotecaPrueba.ObtenerCatalogoOrdenadoPorPrestamos();
+
+foreach (Titulo libro in resultadoPrueba)
+{
+    Console.WriteLine(
+        $"{libro.Nombre} | ISBN: {libro.ISBN} | Prestamos: {libro.PrestamosHistoricos}");
+}
+
