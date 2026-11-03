@@ -205,3 +205,81 @@ foreach (Titulo libro in resultadoPrueba)
         $"{libro.Nombre} | ISBN: {libro.ISBN} | Prestamos: {libro.PrestamosHistoricos}");
 }
 
+
+Console.WriteLine();
+Console.WriteLine("===== BUSQUEDA SECUENCIAL POR TITULO =====");
+
+// Primera prueba: buscar un libro que existe.
+Titulo? encontrado = biblioteca.BuscarPorTitulo("pedro páramo");
+
+if (encontrado != null)
+{
+    Console.WriteLine("Prueba 1: Libro encontrado");
+    Console.WriteLine($"Titulo: {encontrado.Nombre}");
+    Console.WriteLine($"ISBN: {encontrado.ISBN}");
+    Console.WriteLine(
+        $"Ejemplares disponibles: {encontrado.ContarDisponibles()}");
+}
+else
+{
+    Console.WriteLine("Prueba 1: Libro no encontrado");
+}
+
+// Segunda prueba: buscar un libro que no existe.
+Titulo? noEncontrado = biblioteca.BuscarPorTitulo("El libro perdido");
+
+Console.WriteLine();
+
+if (noEncontrado == null)
+{
+    Console.WriteLine("Prueba 2: El libro no existe en el catalogo.");
+}
+else
+{
+    Console.WriteLine($"Prueba 2: Encontrado: {noEncontrado.Nombre}");
+}
+
+Console.WriteLine();
+Console.WriteLine("===== BUSQUEDA BINARIA POR ISBN =====");
+
+// Prueba 1: Buscar un ISBN existente.
+string isbnExistente = "9780000000033";
+
+Titulo? libroIsbnEncontrado =
+    biblioteca.BuscarPorISBN(isbnExistente);
+
+Console.WriteLine();
+Console.WriteLine("Prueba 1: ISBN existente");
+
+if (libroIsbnEncontrado != null)
+{
+    Console.WriteLine("Resultado: Libro encontrado");
+    Console.WriteLine($"Titulo: {libroIsbnEncontrado.Nombre}");
+    Console.WriteLine($"ISBN: {libroIsbnEncontrado.ISBN}");
+    Console.WriteLine(
+        $"Disponibles: {libroIsbnEncontrado.ContarDisponibles()}");
+}
+else
+{
+    Console.WriteLine("Resultado: Libro no encontrado");
+}
+
+// Prueba 2: Buscar un ISBN inexistente.
+string isbnInexistente = "9780000000999";
+
+Titulo? libroIsbnNoEncontrado =
+    biblioteca.BuscarPorISBN(isbnInexistente);
+
+Console.WriteLine();
+Console.WriteLine("Prueba 2: ISBN inexistente");
+
+if (libroIsbnNoEncontrado == null)
+{
+    Console.WriteLine("Resultado: El ISBN no existe en el catalogo.");
+}
+else
+{
+    Console.WriteLine(
+        $"Resultado: Encontrado {libroIsbnNoEncontrado.Nombre}");
+}
+

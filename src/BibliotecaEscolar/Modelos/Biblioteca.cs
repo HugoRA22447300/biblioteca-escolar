@@ -67,5 +67,91 @@ private bool DebeIrAntes(Titulo actual, Titulo comparado)
         StringComparison.CurrentCultureIgnoreCase) < 0;
 }
 
+public Titulo? BuscarPorTitulo(string nombre)
+{
+    if (string.IsNullOrWhiteSpace(nombre))
+    {
+        return null;
+    }
+
+    foreach (Titulo libro in _titulos)
+    {
+        if (string.Equals(
+            libro.Nombre,
+            nombre.Trim(),
+            StringComparison.CurrentCultureIgnoreCase))
+        {
+            return libro;
+        }
+    }
+
+    return null;
+}
+
+public List<Titulo> ObtenerCatalogoOrdenadoPorISBN()
+{
+    // Creamos una copia del catalogo original.
+    List<Titulo> ordenados = new List<Titulo>(_titulos);
+
+    // Ordenamiento por insercion utilizando el ISBN.
+    for (int i = 1; i < ordenados.Count; i++)
+    {
+        Titulo actual = ordenados[i];
+        int j = i - 1;
+
+        while (j >= 0 &&
+               string.CompareOrdinal(
+                   actual.ISBN, ordenados[j].ISBN) < 0)
+        {
+            ordenados[j + 1] = ordenados[j];
+            j--;
+        }
+
+        ordenados[j + 1] = actual;
+    }
+
+    return ordenados;
+}
+   
+public Titulo? BuscarPorISBN(string isbn)
+{
+    if (string.IsNullOrWhiteSpace(isbn))
+    {
+        return null;
+    }
+
+    string isbnBuscado = isbn.Trim();
+
+    // Obtenemos una copia ordenada por ISBN.
+    List<Titulo> ordenados = ObtenerCatalogoOrdenadoPorISBN();
+
+    int inicio = 0;
+    int fin = ordenados.Count - 1;
+
+    while (inicio <= fin)
+    {
+        int medio = inicio + (fin - inicio) / 2;
+
+        int comparacion = string.CompareOrdinal(
+            ordenados[medio].ISBN, isbnBuscado);
+
+        if (comparacion == 0)
+        {
+            return ordenados[medio];
+        }
+
+        if (comparacion < 0)
+        {
+            inicio = medio + 1;
+        }
+        else
+        {
+            fin = medio - 1;
+        }
+    }
+
+    return null;
+}
+ 
     }
 }
