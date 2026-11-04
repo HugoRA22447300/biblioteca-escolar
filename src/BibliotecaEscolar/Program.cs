@@ -283,3 +283,44 @@ else
         $"Resultado: Encontrado {libroIsbnNoEncontrado.Nombre}");
 }
 
+Console.WriteLine();
+Console.WriteLine("===== PRUEBA INTEGRADA DEL SISTEMA =====");
+
+// Obtenemos el catalogo con los prestamos actualizados.
+List<Titulo> catalogoFinal =
+    biblioteca.ObtenerCatalogoOrdenadoPorPrestamos();
+
+int totalDisponiblesFinal = 0;
+
+Console.WriteLine();
+Console.WriteLine("CATALOGO FINAL:");
+
+foreach (Titulo libro in catalogoFinal)
+{
+    int disponibles = libro.ContarDisponibles();
+    totalDisponiblesFinal += disponibles;
+
+    Console.WriteLine(
+        $"{libro.Nombre} | Total: {libro.Ejemplares.Count} | " +
+        $"Disponibles: {disponibles} | " +
+        $"Historial: {libro.PrestamosHistoricos}");
+}
+
+Console.WriteLine();
+Console.WriteLine($"Titulos registrados: {biblioteca.Titulos.Count}");
+Console.WriteLine($"Ejemplares disponibles: {totalDisponiblesFinal}");
+
+// Comprobamos que ambas busquedas consulten el mismo libro.
+Titulo? porNombreIntegracion =
+    biblioteca.BuscarPorTitulo("Pedro Páramo");
+
+Titulo? porISBNIntegracion =
+    biblioteca.BuscarPorISBN("9780000000033");
+
+bool busquedasConsistentes =
+    porNombreIntegracion != null &&
+    ReferenceEquals(porNombreIntegracion, porISBNIntegracion);
+
+Console.WriteLine(
+    $"Busquedas consistentes: {(busquedasConsistentes ? "SI" : "NO")}");
+
