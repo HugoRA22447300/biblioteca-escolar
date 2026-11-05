@@ -1,4 +1,4 @@
-﻿
+﻿using BibliotecaEscolar.Interfaz;
 using BibliotecaEscolar.Modelos;
 
 // Creamos nuestra biblioteca.
@@ -28,6 +28,14 @@ biblioteca.AgregarTitulo(new Titulo(
 
 biblioteca.AgregarTitulo(new Titulo(
     "La metamorfosis", "9780000000071", 1, 7));
+
+
+ // Abrimos el menu interactivo de la biblioteca.
+if (!args.Contains("--pruebas"))
+{
+    MenuBiblioteca.Mostrar(biblioteca);
+    return;
+}
 
 // Mostramos los títulos registrados.
 Console.WriteLine("===== BIBLIOTECA ESCOLAR =====");
