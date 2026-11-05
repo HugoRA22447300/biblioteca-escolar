@@ -324,3 +324,74 @@ bool busquedasConsistentes =
 Console.WriteLine(
     $"Busquedas consistentes: {(busquedasConsistentes ? "SI" : "NO")}");
 
+Console.WriteLine();
+Console.WriteLine("===== DIA 7: COMPARACIONES BINARIAS =====");
+
+// Preparamos el catalogo ordenado una sola vez.
+List<Titulo> catalogoIsbnDia7 =
+    biblioteca.ObtenerCatalogoOrdenadoPorISBN();
+string [] isbnsOrdenadosDia7 =
+    new string [catalogoIsbnDia7.Count];
+
+   
+for (int i = 0; i < catalogoIsbnDia7.Count; i++)
+{
+    isbnsOrdenadosDia7[i] = catalogoIsbnDia7[i].ISBN;
+}
+
+// Definimos las cinco consultas de prueba.
+string[] consultasDia7 =
+{
+    "9780000000002",
+    "9780000000033",
+    "9780000000057",
+    "9780000000071",
+    "9780000000999"
+};
+
+// Ejecutamos las busquedas y registramos comparaciones.
+foreach (string codigo in consultasDia7)
+{
+    Titulo? resultadoDia7 =
+        biblioteca.BuscarPorISBNConComparaciones(
+            codigo,
+            catalogoIsbnDia7,
+            out int comparacionesDia7);
+
+    string nombreResultado =
+        resultadoDia7?.Nombre ?? "No encontrado";
+
+    Console.WriteLine();
+    Console.WriteLine($"ISBN: {codigo}");
+    Console.WriteLine($"Resultado: {nombreResultado}");
+    Console.WriteLine($"Comparaciones: {comparacionesDia7}");
+    
+// Creamos un comparador nuevo para cada consulta.
+ComparadorISBN comparadorDotNet = new ComparadorISBN();
+
+// Ejecutamos la busqueda binaria de .NET.
+int indiceDotNet = Array.BinarySearch(
+    isbnsOrdenadosDia7,
+    codigo,
+    comparadorDotNet);
+
+// Obtenemos el resultado.
+string resultadoDotNet = indiceDotNet >= 0
+    ? catalogoIsbnDia7[indiceDotNet].Nombre
+    : "No encontrado";
+
+// Verificamos que ambas busquedas coincidan.
+bool resultadosCoinciden =
+    (resultadoDia7 == null && indiceDotNet < 0) ||
+    (resultadoDia7 != null &&
+     indiceDotNet >= 0 &&
+     resultadoDia7.ISBN == isbnsOrdenadosDia7[indiceDotNet]);
+
+Console.WriteLine($"Resultado .NET: {resultadoDotNet}");
+Console.WriteLine(
+    $"Comparaciones .NET: {comparadorDotNet.Comparaciones}");
+
+Console.WriteLine(
+    $"Resultados coinciden: {(resultadosCoinciden ? "SI" : "NO")}");
+
+}

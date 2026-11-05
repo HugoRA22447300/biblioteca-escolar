@@ -113,6 +113,7 @@ public List<Titulo> ObtenerCatalogoOrdenadoPorISBN()
     return ordenados;
 }
    
+
 public Titulo? BuscarPorISBN(string isbn)
 {
     if (string.IsNullOrWhiteSpace(isbn))
@@ -120,10 +121,25 @@ public Titulo? BuscarPorISBN(string isbn)
         return null;
     }
 
-    string isbnBuscado = isbn.Trim();
-
-    // Obtenemos una copia ordenada por ISBN.
     List<Titulo> ordenados = ObtenerCatalogoOrdenadoPorISBN();
+
+    return BuscarPorISBNConComparaciones(
+        isbn, ordenados, out _);
+}
+
+public Titulo? BuscarPorISBNConComparaciones(
+    string isbn,
+    IReadOnlyList<Titulo> ordenados,
+    out int comparaciones)
+{
+    comparaciones = 0;
+
+    if (string.IsNullOrWhiteSpace(isbn))
+    {
+        return null;
+    }
+
+    string isbnBuscado = isbn.Trim();
 
     int inicio = 0;
     int fin = ordenados.Count - 1;
@@ -132,15 +148,17 @@ public Titulo? BuscarPorISBN(string isbn)
     {
         int medio = inicio + (fin - inicio) / 2;
 
-        int comparacion = string.CompareOrdinal(
+        comparaciones++;
+
+        int resultado = string.CompareOrdinal(
             ordenados[medio].ISBN, isbnBuscado);
 
-        if (comparacion == 0)
+        if (resultado == 0)
         {
             return ordenados[medio];
         }
 
-        if (comparacion < 0)
+        if (resultado < 0)
         {
             inicio = medio + 1;
         }
@@ -152,6 +170,5 @@ public Titulo? BuscarPorISBN(string isbn)
 
     return null;
 }
- 
     }
 }
